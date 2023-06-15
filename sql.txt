@@ -1,0 +1,29 @@
+
+create table Oficinas(
+	ID int unique not null,
+    Nombre varchar(10) not null,
+    Direccion varchar(10) not null,
+    Ciudad varchar(10) not null,
+    Estado varchar(10) not null,
+    Pais varchar(10) not null,
+    Division int
+);
+
+DELIMITER $$
+CREATE TRIGGER PK BEFORE INSERT ON Oficinas 
+FOR EACH ROW
+BEGIN
+	call IDOFICINA_SEC();
+END 
+DELIMITER 
+
+DELIMITER $$
+CREATE PROCEDURE SP(IN op int, id int, nombre varchar(10), direccion varchar(10), ciudad varchar(10), estado varchar(10), pais varchar(10), division int)
+BEGIN
+	IF (op = 1)THEN
+		INSERT INTO Oficinas(Nombre, Direccion, Ciudad,Estado, Pais, Division) values(nombre, direccion, ciudad, estado, pais, division);
+    ELSE
+		UPDATE Oficinas SET Direccion = direccion WHERE ID = id;
+    END IF;
+END$$ 
+DELIMITER 
